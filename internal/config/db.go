@@ -7,6 +7,7 @@ import (
     "gorm.io/driver/postgres"
 	"github.com/joho/godotenv"
     "gorm.io/gorm"
+	"github.com/Sina-Mahmoodmoradi/task-manager/internal/repository/gorm/models"
 )
 
 var DB *gorm.DB
@@ -32,5 +33,11 @@ func InitDB() {
     }
 
     DB = db
+
+    err = db.AutoMigrate(&models.UserModel{}, &models.TaskModel{})
+    if err != nil {
+        log.Fatalf("❌ migration failed: %v", err)
+    }
+
     log.Println("✅ Connected to PostgreSQL")
 }
