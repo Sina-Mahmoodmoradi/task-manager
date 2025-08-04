@@ -1,12 +1,12 @@
 package models
 
 import (
-    "gorm.io/gorm"
+	"gorm.io/gorm"
 )
 
-type UserModel struct {
+type User struct {
     gorm.Model
     Username string      `gorm:"uniqueIndex;not null"`
     Password string      `gorm:"not null"`
-    Tasks    []TaskModel `gorm:"foreignKey:UserID"`
+    Tasks    []Task `gorm:"foreignKey:UserID"`
 }

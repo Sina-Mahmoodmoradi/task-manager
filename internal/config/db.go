@@ -1,13 +1,14 @@
 package config
 
 import (
-    "fmt"
-    "log"
-    "os"
-    "gorm.io/driver/postgres"
-	"github.com/joho/godotenv"
-    "gorm.io/gorm"
+	"fmt"
+	"log"
+	"os"
+
 	"github.com/Sina-Mahmoodmoradi/task-manager/internal/repository/gorm/models"
+	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
@@ -34,7 +35,7 @@ func InitDB() {
 
     DB = db
 
-    err = db.AutoMigrate(&models.UserModel{}, &models.TaskModel{})
+    err = db.AutoMigrate(&models.User{}, &models.Task{})
     if err != nil {
         log.Fatalf("❌ migration failed: %v", err)
     }

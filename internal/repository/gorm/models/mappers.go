@@ -4,7 +4,7 @@ import "github.com/Sina-Mahmoodmoradi/task-manager/internal/domain"
 
 // ----------- User Mappers ------------
 
-func ToDomainUser(u UserModel) domain.User {
+func ToDomainUser(u User) domain.User {
     tasks := make([]domain.Task, len(u.Tasks))
     for i, t := range u.Tasks {
         tasks[i] = ToDomainTask(t)
@@ -18,13 +18,13 @@ func ToDomainUser(u UserModel) domain.User {
     }
 }
 
-func FromDomainUser(u domain.User) UserModel {
-    tasks := make([]TaskModel, len(u.Tasks))
+func FromDomainUser(u domain.User) User {
+    tasks := make([]Task, len(u.Tasks))
     for i, t := range u.Tasks {
         tasks[i] = FromDomainTask(t)
     }
 
-    return UserModel{
+    return User{
         Username: u.Username,
         Password: u.Password,
         Tasks:    tasks,
@@ -33,7 +33,7 @@ func FromDomainUser(u domain.User) UserModel {
 
 // ----------- Task Mappers ------------
 
-func ToDomainTask(t TaskModel) domain.Task {
+func ToDomainTask(t Task) domain.Task {
     return domain.Task{
         ID:     t.ID,
         Title:  t.Title,
@@ -42,8 +42,8 @@ func ToDomainTask(t TaskModel) domain.Task {
     }
 }
 
-func FromDomainTask(t domain.Task) TaskModel {
-    return TaskModel{
+func FromDomainTask(t domain.Task) Task {
+    return Task{
         Title:  t.Title,
         Done:   t.Done,
         UserID: t.UserID,
