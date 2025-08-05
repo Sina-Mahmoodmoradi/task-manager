@@ -20,5 +20,4 @@ type UserService interface {
 
     GetByID(id uint) (*User, error)
     GetByUsername(username string) (*User, error)
-    List() ([]User, error)
 }
