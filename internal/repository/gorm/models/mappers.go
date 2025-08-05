@@ -35,17 +35,19 @@ func FromDomainUser(u domain.User) User {
 
 func ToDomainTask(t Task) domain.Task {
     return domain.Task{
-        ID:     t.ID,
-        Title:  t.Title,
-        Done:   t.Done,
-        UserID: t.UserID,
+        ID:          t.ID,
+        Description: t.Description,
+        Title:      t.Title,
+        Done:       t.Done,
+        UserID:    t.UserID,
     }
 }
 
 func FromDomainTask(t domain.Task) Task {
     return Task{
-        Title:  t.Title,
-        Done:   t.Done,
-        UserID: t.UserID,
+        Title:       t.Title,
+        Description: t.Description,
+        Done:       t.Done,
+        UserID:    t.UserID,
     }
 }
