@@ -6,3 +6,8 @@ type User struct {
     Password string
     Tasks    []Task
 }
+
+type UserRepository interface {
+	Create(user *User) error
+	GetByUsername(username string) (*User, error)
+}
