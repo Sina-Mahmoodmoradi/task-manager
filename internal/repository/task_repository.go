@@ -15,6 +15,11 @@ type taskRepository struct {
 	db *gorm.DB
 }
 
+func newTaskRepository(db *gorm.DB) domain.TaskRepository {
+	return &taskRepository{
+		db: db,
+	}
+}
 
 func (r *taskRepository) Create(task *domain.Task) error{
 	taskModel := models.FromDomainTask(*task)
