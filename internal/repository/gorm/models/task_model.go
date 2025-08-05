@@ -6,7 +6,8 @@ import (
 
 type Task struct {
     gorm.Model
-    Title  string `gorm:"not null"`
-    Done   bool
-    UserID uint
+    Title       string `gorm:"not null"`
+    Description string `gorm:"type:text"`
+    Done        bool
+    UserID     uint
 }
