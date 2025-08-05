@@ -48,3 +48,19 @@ func (r *userRepository) GetByUsername(username string) (*domain.User, error) {
 
 	return &domainUser, nil
 }
+
+
+func (r *userRepository) GetByID(id uint)(*domain.User,error){
+	var userModel models.User
+
+	if err:=r.db.First(&userModel,id).Error; err!=nil{
+		if errors.Is(err,gorm.ErrRecordNotFound){
+			return nil,nil
+		}
+		return nil,err
+	}
+
+	domainUser := models.ToDomainUser(userModel)
+
+	return &domainUser,nil
+}
