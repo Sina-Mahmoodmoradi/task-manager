@@ -7,3 +7,9 @@ type Task struct {
     Done   bool
     UserID uint
 }
+
+
+type TaskRepository interface {
+    Create(task *Task) error
+    GetByID(id uint) (*Task, error)
+}
