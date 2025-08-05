@@ -19,10 +19,7 @@ func NewUserRepository(db *gorm.DB) domain.UserRepository {
 
 // Create inserts a new user into the database
 func (r *userRepository) Create(user *domain.User) error {
-	userModel := models.User{
-		Username: user.Username,
-		Password: user.Password,
-	}
+	userModel := models.FromDomainUser(*user)
 
 	if err := r.db.Create(&userModel).Error; err != nil {
 		return err
@@ -47,21 +44,7 @@ func (r *userRepository) GetByUsername(username string) (*domain.User, error) {
 	}
 
 	// Convert model.User → domain.User
-	domainUser := &domain.User{
-		ID:       userModel.ID,
-		Username: userModel.Username,
-		Password: userModel.Password,
-	}
+	domainUser := models.ToDomainUser(userModel)
 
-	// Tasks conversion (if needed)
-	for _, task := range userModel.Tasks {
-		domainUser.Tasks = append(domainUser.Tasks, domain.Task{
-			ID:          task.ID,
-			Title:       task.Title,
-			Description: task.Description,
-			UserID:      task.UserID,
-		})
-	}
-
-	return domainUser, nil
+	return &domainUser, nil
 }
