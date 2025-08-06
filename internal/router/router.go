@@ -6,7 +6,7 @@ import (
 	"github.com/Sina-Mahmoodmoradi/task-manager/internal/handler"
 	"github.com/Sina-Mahmoodmoradi/task-manager/internal/service"
 	"github.com/Sina-Mahmoodmoradi/task-manager/internal/repository"
-	"github.com/Sina-Mahmoodmoradi/task-manager/pkg/database"
+	"github.com/Sina-Mahmoodmoradi/task-manager/internal/infrastructure/database"
 )
 
 

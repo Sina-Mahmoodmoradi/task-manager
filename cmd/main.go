@@ -4,7 +4,7 @@ import (
     "log"
 
     "github.com/Sina-Mahmoodmoradi/task-manager/internal/router"
-	"github.com/Sina-Mahmoodmoradi/task-manager/pkg/database"
+	"github.com/Sina-Mahmoodmoradi/task-manager/internal/infrastructure/database"
 )
 
 func main() {
