@@ -7,6 +7,7 @@ import (
 	"github.com/Sina-Mahmoodmoradi/task-manager/internal/service"
 	"github.com/Sina-Mahmoodmoradi/task-manager/internal/repository"
 	"github.com/Sina-Mahmoodmoradi/task-manager/internal/infrastructure/database"
+	"github.com/Sina-Mahmoodmoradi/task-manager/internal/infrastructure/security"
 )
 
 
@@ -16,12 +17,16 @@ func SetupRouter(db *database.Database) *gin.Engine {
 	// Repositories
 	userRepo := repository.NewUserRepository(db.DB)
 
-	// Services
-	userService := service.NewUserService(userRepo)
+	// Token Manager
+	tokenManager := security.NewJWTTokenManager()
+	
+    // Services
+	userService := service.NewUserService(userRepo, tokenManager)
 
 	// Handlers
 	userHandler := handler.NewUserHandler(userService)
-    
+
+
 	// Routes
 	api := r.Group("/api/v1")
 	{

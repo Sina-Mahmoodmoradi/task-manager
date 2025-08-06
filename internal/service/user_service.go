@@ -2,18 +2,22 @@ package service
 
 import (
     "errors"
-
+    "time"
     "golang.org/x/crypto/bcrypt"
 
     "github.com/Sina-Mahmoodmoradi/task-manager/internal/domain"
+    "github.com/Sina-Mahmoodmoradi/task-manager/internal/core/port"
 )
 
+
+
 type userService struct {
-    userRepo domain.UserRepository
+    userRepo   domain.UserRepository
+    tokenManager port.TokenManager
 }
 
-func NewUserService(userRepo domain.UserRepository) domain.UserService {
-    return &userService{userRepo: userRepo}
+func NewUserService(userRepo domain.UserRepository, tokenManager port.TokenManager) domain.UserService {
+    return &userService{userRepo: userRepo, tokenManager: tokenManager}
 }
 
 func (s *userService) Register(username, password string) (string, error) {
@@ -40,7 +44,10 @@ func (s *userService) Register(username, password string) (string, error) {
 
 	// NOTE: Here you would generate a JWT or other token.
     // For now, we’ll just return a placeholder string.
-    token := "fake-jwt-token"
+    token, err := s.tokenManager.CreateToken(user.ID, time.Hour)
+    if err != nil {
+        return "", err
+    }
 
     return token, nil
 }
@@ -56,9 +63,10 @@ func (s *userService) Login(username, password string) (string, error) {
         return "", errors.New("invalid credentials")
     }
 
-    // NOTE: Here you would generate a JWT or other token.
-    // For now, we’ll just return a placeholder string.
-    token := "fake-jwt-token"
+    token, err := s.tokenManager.CreateToken(user.ID, time.Hour)
+    if err != nil {
+        return "", err
+    }
 
     return token, nil
 }
