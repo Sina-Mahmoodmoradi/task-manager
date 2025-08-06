@@ -15,7 +15,7 @@ type UserRepository interface {
 
 
 type UserService interface {
-    Register(username, password string) (*User, error)
+    Register(username, password string) (string, error)
     Login(username, password string) (string, error) // returns JWT token (for example)
 
     GetByID(id uint) (*User, error)

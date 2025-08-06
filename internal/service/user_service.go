@@ -16,15 +16,15 @@ func NewUserService(userRepo domain.UserRepository) domain.UserService {
     return &userService{userRepo: userRepo}
 }
 
-func (s *userService) Register(username, password string) (*domain.User, error) {
+func (s *userService) Register(username, password string) (string, error) {
     existing, err := s.userRepo.GetByUsername(username)
     if err == nil && existing != nil {
-        return nil, errors.New("username already exists")
+        return "", errors.New("username already exists")
     }
 
     hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
     if err != nil {
-        return nil, err
+        return "", err
     }
 
     user := &domain.User{
@@ -34,10 +34,15 @@ func (s *userService) Register(username, password string) (*domain.User, error) 
 
     err = s.userRepo.Create(user)
     if err != nil {
-        return nil, err
+        return "", err
     }
 
-    return user, nil
+
+	// NOTE: Here you would generate a JWT or other token.
+    // For now, we’ll just return a placeholder string.
+    token := "fake-jwt-token"
+
+    return token, nil
 }
 
 
