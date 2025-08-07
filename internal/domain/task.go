@@ -13,7 +13,7 @@ type TaskRepository interface {
     Create(task *Task) error
     GetByID(id uint) (*Task, error)
     Delete(id uint) error
-    GetByUserID(userID uint) ([]Task, error)
+    GetByUserId(userID uint) ([]Task, error)
 }
 
 
