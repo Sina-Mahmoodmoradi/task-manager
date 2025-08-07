@@ -30,6 +30,10 @@ type AuthResponse struct {
 	Token string `json:"token"`
 }
 
+type UserResponse struct {
+	ID       uint   `json:"id"`
+	Username string `json:"username"`
+}
 
 func (h *UserHandler) Register(c *gin.Context) {
 	var req RegisterRequest
@@ -62,4 +66,23 @@ func (h *UserHandler) Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, AuthResponse{Token: token})
+}
+
+func (h *UserHandler) GetCurrentUser(c *gin.Context) {
+	userId, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	user, err := h.userService.GetByID(userId.(uint))
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, UserResponse{
+		ID:       user.ID,
+		Username: user.Username,
+	})
 }
