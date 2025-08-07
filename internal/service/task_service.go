@@ -23,7 +23,10 @@ func (s *taskService)CreateTask(userID uint, title string, description string ) 
 		UserID: userID,
 	}
 
-	s.repo.Create(task)
+	if err:=s.repo.Create(task);err!=nil{
+		return nil,err
+	}
+
 	return task, nil
 }
 
