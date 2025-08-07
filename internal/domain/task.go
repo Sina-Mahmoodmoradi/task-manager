@@ -21,7 +21,7 @@ type TaskRepository interface {
 type TaskService interface {
     CreateTask(userID uint, title, description string) (*Task, error)
     GetTaskByID(taskID uint) (*Task, error)
-    UpdateTask(taskID uint, title, description string) (*Task, error)
+    // UpdateTask(taskID uint, title, description string) (*Task, error)
     DeleteTask(taskID uint) error
     ListTasksByUser(userID uint) ([]Task, error)
 }
