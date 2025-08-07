@@ -49,3 +49,35 @@ func (r *taskRepository) GetByID(id uint)(*domain.Task,error){
 
 	return &domainTask,nil
 }
+
+
+func (r *taskRepository) Delete(id uint) error {
+	var taskModel models.Task
+	if err := r.db.First(&taskModel, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil
+		}
+		return err
+	}
+
+	if err := r.db.Delete(&taskModel).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+
+func (r *taskRepository) GetByUserId(userId uint) ([]domain.Task, error) {
+	var taskModels []models.Task
+	if err := r.db.Where("user_id = ?", userId).Find(&taskModels).Error; err != nil {
+		return nil, err
+	}
+
+	var tasks []domain.Task
+	for _, taskModel := range taskModels {
+		tasks = append(tasks, models.ToDomainTask(taskModel))
+	}
+
+	return tasks, nil
+}
