@@ -17,16 +17,18 @@ func SetupRouter(db *database.Database) *gin.Engine {
     
 	// Repositories
 	userRepo := repository.NewUserRepository(db.DB)
+	taskRepo := repository.NewTaskRepository(db.DB)
 
 	// Token Manager
 	tokenManager := security.NewJWTTokenManager()
 	
     // Services
 	userService := service.NewUserService(userRepo, tokenManager)
+	taskService := service.NewTaskService(taskRepo)
 
 	// Handlers
 	userHandler := handler.NewUserHandler(userService)
-
+	taskHandler := handler.NewTaskHandler(taskService)
 
 	// Routes
 	api := r.Group("/api/v1")
@@ -39,6 +41,10 @@ func SetupRouter(db *database.Database) *gin.Engine {
 		auth.Use(middleware.AuthMiddleware(tokenManager))
 		{
 			auth.GET("/me", userHandler.GetCurrentUser)
+			auth.GET("/tasks", taskHandler.ListTasks)
+			auth.GET("/tasks/:id", taskHandler.GetTask)
+			auth.POST("/tasks", taskHandler.CreateTask)
+			auth.DELETE("/tasks/:id", taskHandler.DeleteTask)
 		}
 	}
 
