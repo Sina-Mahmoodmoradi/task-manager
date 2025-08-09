@@ -46,4 +46,27 @@ func (s *taskService)ListTasksByUser(UserID uint) ([]domain.Task,error){
 }
 
 
+func (s *taskService)UpdateTask(taskID uint, updates *domain.TaskUpdate ) (*domain.Task, error){
+	task,err := s.repo.GetByID(taskID)
+	if err != nil {
+		return nil, err
+	}
 
+	if updates.Title!=nil{
+		task.Title = *updates.Title
+	}
+
+	if updates.Description!=nil{
+		task.Description = *updates.Description
+	}
+
+	if updates.Done!=nil{
+		task.Done = *updates.Done
+	}
+
+	if err := s.repo.Update(task); err != nil {
+		return nil, err
+	}
+
+	return task, nil
+}
