@@ -36,6 +36,12 @@ type ListTasksResponse struct {
 	Tasks []TaskResponse `json:"tasks"`
 }
 
+type TaskUpdateRequest struct {
+    Title       *string `json:"title"`
+    Description *string `json:"description"`
+    Done        *bool   `json:"done"`
+}
+
 func (h *TaskHandler)CreateTask(c *gin.Context){
 	var req CreateTaskRequest
 	
@@ -127,6 +133,39 @@ func (h *TaskHandler)ListTasks(c *gin.Context){
 	c.JSON(http.StatusOK,ListTasksResponse{
 		Tasks: responseTasks,
 	})
+}
 
+
+func (h *TaskHandler)UpdateTask(c *gin.Context){
+	idParam := c.Param("id")
+	idUint64, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid task ID"})
+		return
+	} 
 	
+	var req TaskUpdateRequest
+	if err:=c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest,gin.H{"error":"Invalid input"})
+		return
+	}
+
+	updates := domain.TaskUpdate{
+		Title:       req.Title,
+		Description: req.Description,
+		Done:       req.Done,
+	}
+
+
+	task, err := h.taskService.UpdateTask(uint(idUint64),&updates)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, TaskResponse{
+		ID: task.ID,
+		Title: task.Title,
+		Description: task.Description,
+	})
 }
