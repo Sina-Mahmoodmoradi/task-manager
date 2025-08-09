@@ -81,3 +81,14 @@ func (r *taskRepository) GetByUserId(userId uint) ([]domain.Task, error) {
 
 	return tasks, nil
 }
+
+
+func (r *taskRepository) Update(domainTask *domain.Task) error {
+	taskModel := models.FromDomainTask(*domainTask)
+
+	if err := r.db.Save(&taskModel).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
