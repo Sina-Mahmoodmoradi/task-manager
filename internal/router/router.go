@@ -43,6 +43,7 @@ func SetupRouter(db *database.Database) *gin.Engine {
 			auth.GET("/me", userHandler.GetCurrentUser)
 			auth.GET("/tasks", taskHandler.ListTasks)
 			auth.GET("/tasks/:id", taskHandler.GetTask)
+			auth.PUT("/tasks/:id", taskHandler.UpdateTask)
 			auth.POST("/tasks", taskHandler.CreateTask)
 			auth.DELETE("/tasks/:id", taskHandler.DeleteTask)
 		}
