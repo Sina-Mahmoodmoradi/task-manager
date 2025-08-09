@@ -26,7 +26,7 @@ type TaskUpdate struct {
 type TaskService interface {
     CreateTask(userID uint, title, description string) (*Task, error)
     GetTaskByID(taskID uint) (*Task, error)
-    UpdateTask(taskID uint, updates TaskUpdate) (*Task, error)
+    UpdateTask(taskID uint, updates *TaskUpdate) (*Task, error)
     DeleteTask(taskID uint) error
     ListTasksByUser(userID uint) ([]Task, error)
 }
