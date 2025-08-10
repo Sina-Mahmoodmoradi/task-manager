@@ -11,7 +11,7 @@ type Task struct {
 
 type TaskRepository interface {
     Create(task *Task) error
-    Update(task *Task) error
+    Update(taskID uint, userID uint, updates *TaskUpdate) (Task, error)
     GetByID(id uint) (*Task, error)
     Delete(id uint) error
     GetByUserId(userID uint) ([]Task, error)

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"errors"
+
 	"github.com/Sina-Mahmoodmoradi/task-manager/internal/domain"
 )
 
@@ -48,29 +48,9 @@ func (s *taskService)ListTasksByUser(UserID uint) ([]domain.Task,error){
 
 
 func (s *taskService)UpdateTask(taskID uint, userID uint, updates *domain.TaskUpdate ) (*domain.Task, error){
-	task,err := s.repo.GetByID(taskID)
-	if err != nil {
-		return nil, err
+	task,err:=s.repo.Update(taskID,userID,updates)
+	if err!=nil{
+		return nil,err
 	}
-	if task.UserID != userID {
-		return nil, errors.New("unauthorized")
-	}
-
-	if updates.Title!=nil{
-		task.Title = *updates.Title
-	}
-
-	if updates.Description!=nil{
-		task.Description = *updates.Description
-	}
-
-	if updates.Done!=nil{
-		task.Done = *updates.Done
-	}
-
-	if err := s.repo.Update(task); err != nil {
-		return nil, err
-	}
-
-	return task, nil
+	return &task, nil
 }

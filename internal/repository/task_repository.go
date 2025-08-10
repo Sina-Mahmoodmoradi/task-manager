@@ -1,8 +1,8 @@
 package repository
 
-
 import (
 	"errors"
+	"log"
 
 	"gorm.io/gorm"
 
@@ -37,14 +37,14 @@ func (r *taskRepository) Create(task *domain.Task) error{
 
 func (r *taskRepository) GetByID(id uint)(*domain.Task,error){
 	var taskModel models.Task
-
+	log.Printf("Retrieving task with ID: %d\n", id)
 	if err:=r.db.First(&taskModel,id).Error; err!=nil{
 		if errors.Is(err,gorm.ErrRecordNotFound){
 			return nil,nil
 		}
 		return nil,err
 	}
-
+	log.Printf("Retrieved task: %+v\n", taskModel)
 	domainTask := models.ToDomainTask(taskModel)
 
 	return &domainTask,nil
@@ -83,12 +83,27 @@ func (r *taskRepository) GetByUserId(userId uint) ([]domain.Task, error) {
 }
 
 
-func (r *taskRepository) Update(domainTask *domain.Task) error {
-	taskModel := models.FromDomainTask(*domainTask)
-
-	if err := r.db.Save(&taskModel).Error; err != nil {
-		return err
+func (r *taskRepository) Update(taskID uint, userID uint, updates *domain.TaskUpdate) (domain.Task, error) {
+	var taskModel models.Task
+	if err := r.db.First(&taskModel, "id = ? and user_id = ?", taskID, userID).Error; err != nil {
+		return domain.Task{}, err
 	}
 
-	return nil
+
+
+	if updates.Title != nil {
+		taskModel.Title = *updates.Title
+	}
+	if updates.Description != nil {
+		taskModel.Description = *updates.Description
+	}
+	if updates.Done != nil {
+		taskModel.Done = *updates.Done
+	}
+
+	if err := r.db.Save(&taskModel).Error; err != nil {
+		return domain.Task{}, err
+	}
+
+	return models.ToDomainTask(taskModel), nil
 }
